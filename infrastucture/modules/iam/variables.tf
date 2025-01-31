@@ -8,6 +8,6 @@ variable "environment" {
   type = string
 }
 variable "execution_role_policy_arn" {
-  description = "ARN of the IAM policy for ECS task execution"
+  description = "ARN of the IAM policy for EkS task execution"
   type        = string
 }
