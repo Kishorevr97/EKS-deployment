@@ -1,13 +1,9 @@
-variable "vpc_id" {
-  description = "VPC ID for the security group"
-  type = string
+variable "cluster_role_name" {
+  type        = string
+  description = "The name of the IAM role for the EKS cluster."
 }
 
-variable "environment" {
-  description = "Environment name (e.g., dev, staging, prod)"
-  type = string
-}
-variable "execution_role_policy_arn" {
-  description = "ARN of the IAM policy for EkS task execution"
+variable "fargate_role_name" {
   type        = string
+  description = "The name of the IAM role for Fargate pod execution."
 }
