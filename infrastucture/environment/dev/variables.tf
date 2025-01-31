@@ -21,7 +21,7 @@ variable "availability_zones" {
 
 
 variable "execution_role_policy_arn" {
-  description = "IAM policy ARN for ECS execution role"
+  description = "IAM policy ARN for EkS execution role"
   type        = string
 }
 
