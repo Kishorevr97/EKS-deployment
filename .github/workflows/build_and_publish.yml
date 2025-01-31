@@ -1,0 +1,44 @@
+name: Build and Push to ECR
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main  # Change to your deployment branch
+
+jobs:
+  build-and-push:
+    name: Build & Push Docker Image to ECR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+     
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+         aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+         aws-secret-access-key: ${{ secrets.SECRET_KEY }}
+         aws-region: eu-north-1
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build Docker image appointment-service
+        run: |
+          docker build -t development-env-appointment-service-repo ./app/appointment-service
+          docker tag development-env-appointment-service-repo:latest 084828605119.dkr.ecr.eu-north-1.amazonaws.com/development-env-appointment-service-repo:latest
+          
+      - name: Build Docker image patient-service
+        run: |
+          docker build -t development-env-patient-service-repo ./app/patient-service
+          docker tag development-env-patient-service-repo:latest 084828605119.dkr.ecr.eu-north-1.amazonaws.com/development-env-patient-service-repo:latest
+          
+          
+      - name: Push Docker image to ECR
+        run: |
+          docker push 084828605119.dkr.ecr.eu-north-1.amazonaws.com/development-env-appointment-service-repo:latest
+          docker push 084828605119.dkr.ecr.eu-north-1.amazonaws.com/development-env-patient-service-repo:latest
