@@ -1,3 +1,8 @@
+resource "aws_iam_role" "eks_cluster_role" {
+  name = "eksClusterRole"
+  assume_role_policy = file("${path.module}/policies/eks_cluster_policy.json")
+}
+
 
 resource "aws_iam_role" "eks_task_role" {
   name = "${var.environment}-eks-task-role"
