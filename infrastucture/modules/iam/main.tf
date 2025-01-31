@@ -1,58 +1,48 @@
 resource "aws_iam_role" "eks_cluster_role" {
-  name = "eksClusterRole"
-  assume_role_policy = file("${path.module}/policies/eks_cluster_policy.json")
-}
+  name = var.cluster_role_name
 
-
-resource "aws_iam_role" "eks_task_role" {
-  name = "${var.environment}-eks-task-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Principal = {
-        Service = "eks-tasks.amazonaws.com"
-      }
-      Effect = "Allow"
-    }]
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Principal = {
+          Service = "eks.amazonaws.com"
+        }
+        Effect = "Allow"
+        Sid    = ""
+      },
+    ]
   })
 }
 
-resource "aws_iam_role_policy_attachment" "eks_execution_role" {
-  role       = aws_iam_role.eks_execution_role.name
-  policy_arn = var.execution_role_policy_arn
+# IAM Role for Fargate Pod Execution
+resource "aws_iam_role" "fargate_pod_execution_role" {
+  name = var.fargate_role_name
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "eks-fargate-pods.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
 }
 
 
-# Security Group for EkS Tasks (can be used for both services)
-resource "aws_security_group" "eks_security_group" {
-  name        = "${var.environment}-eks-sg"
-  description = "Security group for EkS tasks"
-  vpc_id      = var.vpc_id
-  ingress {
-    from_port   = 3000
-    to_port     = 3000
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Allow HTTPS traffic from anywhere
-  }
+# Attach managed policies to the EKS Cluster Role
+resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
+  role       = aws_iam_role.eks_cluster_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+}
 
-  ingress {
-    from_port   = 3001
-    to_port     = 3001
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] 
-  }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+# Attach managed policies to the Fargate Pod Execution Role
+resource "aws_iam_role_policy_attachment" "fargate_execution_policy" {
+  role       = aws_iam_role.fargate_pod_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
 }
