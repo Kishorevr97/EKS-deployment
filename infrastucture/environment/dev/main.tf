@@ -18,10 +18,9 @@ module "eks" {
 }
 
 module "iam" {
-  source                      = "../../modules/iam"
-  execution_role_policy_arn   = var.execution_role_policy_arn
-  vpc_id                      = module.vpc.vpc_id
-  environment                 = var.environment
+  source                = "../../modules/iam"
+  cluster_role_name     = "eks-cluster-role"
+  fargate_role_name     = "eks-fargate-execution-role"
 }
 
 module "ecr" {
