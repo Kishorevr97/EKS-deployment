@@ -8,10 +8,13 @@ module "vpc" {
 }
 
 module "eks" {
-  source = "../../modules/eks"
-  cluster_name = "dev-eks-cluster"
-  cluster_role_arn = module.iam.eks_cluster_role_arn
-  subnet_ids   = module.vpc.public_subnet_ids
+  source               = "../../modules/eks"
+  cluster_name         = "my-eks-cluster"
+  cluster_role_arn     = module.iam.eks_cluster_role_arn
+  private_subnet_ids          = module.vpc.private_subnet_ids
+  fargate_profile_name = "fargate-profile"
+  fargate_role_arn     = module.iam.fargate_pod_execution_role_arn
+  fargate_namespace    = "default"
 }
 
 module "iam" {
