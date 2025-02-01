@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: microservice
+  name: patient-service
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: appointment-service
+      app: patient-service
   template:
     metadata:
       labels:
-        app: appointment-service
+        app: patient-service
     spec:
       containers:
-      - name: appointment-service
+      - name: patient-service
         image: 084828605119.dkr.ecr.eu-north-1.amazonaws.com/development-env-patient-service-repo:latest
         ports:
         - containerPort: 80
