@@ -7,30 +7,38 @@ on:
   pull_request:
 
 env:
-  AWS_REGION: us-east-1
-  CLUSTER_NAME: dev-eks-cluster
-  ECR_REPOSITORY: microservice-dev
-  IMAGE_TAG: latest
+  CLUSTER_NAME: my-eks-cluster
 
 jobs:
   deploy:
     name: Deploy to EKS
     runs-on: ubuntu-latest
 
-    permissions:
-      id-token: write
-      contents: read
+    # permissions:
+    #   id-token: write
+    #   contents: read
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+         aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+         aws-secret-access-key: ${{ secrets.SECRET_KEY }}
+         aws-region: eu-north-1
+
+      - name: Kubectl tool installer
+        uses: Azure/setup-kubectl@v4.0.0     
      
 
       - name: Update kubeconfig
-        run: aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
+        run: aws eks update-kubeconfig --name $CLUSTER_NAME --region eu-north-1
 
       - name: Deploy to Kubernetes
         run: |
-          kubectl apply -f kubernetes/deployment.yaml
-          kubectl apply -f kubernetes/service.yaml
+          kubectl apply -f kubernetes/appointment-deployment.yml
+          kubectl apply -f kubernetes/appointment-service.yml
+          kubectl apply -f kubernetes/patient-deployment.yml
+          kubectl apply -f kubernetes/patient-service.yml
