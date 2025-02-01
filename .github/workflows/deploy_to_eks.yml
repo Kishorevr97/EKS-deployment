@@ -47,4 +47,5 @@ jobs:
       - name: pod details
         run: |
            kubectl get pods -A
+           kubectl describe pod appointment-service-64f88dc55c-grzq6  -n default
          
