@@ -30,10 +30,10 @@ jobs:
         run: terraform init
         working-directory: infrastucture/environment/dev
 
-      - name: Terraform Destroy Plan
-        run: terraform plan -destroy -var-file=dev.tfvars -out=tfplan
-        working-directory: infrastucture/environment/dev
+      # - name: Terraform Destroy Plan
+      #   run: terraform plan -destroy -var-file=dev.tfvars -out=tfplan
+      #   working-directory: infrastucture/environment/dev
 
       - name: Terraform Destroy Apply
-        run: terraform apply -auto-approve tfplan
+        run: terraform destory -auto-approve
         working-directory: infrastucture/environment/dev
