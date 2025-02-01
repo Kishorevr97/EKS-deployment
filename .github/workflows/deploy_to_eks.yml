@@ -38,7 +38,7 @@ jobs:
 
       - name: Deploy to Kubernetes
         run: |
-          kubectl apply -f kubernetes/appointment-deployment.yml
-          kubectl apply -f kubernetes/appointment-service.yml
-          kubectl apply -f kubernetes/patient-deployment.yml
-          kubectl apply -f kubernetes/patient-service.yml
+          kubectl apply -f infrastucture/kubernetes/appointment-deployment.yml
+          kubectl apply -f infrastucture/kubernetes/appointment-service.yml
+          kubectl apply -f infrastucture/kubernetes/patient-deployment.yml
+          kubectl apply -f infrastucture/kubernetes/patient-service.yml
