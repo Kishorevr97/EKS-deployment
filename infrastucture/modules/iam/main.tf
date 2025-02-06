@@ -17,7 +17,7 @@ resource "aws_iam_role" "eks_cluster_role" {
 }
 
 # IAM Role for Fargate Pod Execution
-resource "aws_iam_role" "fargate_pod_execution_role" {
+/*resource "aws_iam_role" "fargate_pod_execution_role" {
   name = var.fargate_role_name
 
   assume_role_policy = jsonencode({
@@ -45,4 +45,4 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
 resource "aws_iam_role_policy_attachment" "fargate_execution_policy" {
   role       = aws_iam_role.fargate_pod_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
-}
+}*/
