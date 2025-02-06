@@ -13,6 +13,55 @@ resource "aws_eks_cluster" "main" {
   }
 }
 
+
+resource "aws_security_group" "eks_sg" {
+  name        = "eks-cluster-sg"
+  description = "EKS cluster security group"
+  vpc_id      = var.vpc_id
+
+  egress {
+    from_port   = 0          # Allow all ports for egress traffic
+    to_port     = 0          # Allow all ports for egress traffic
+    protocol    = "-1"       # All protocols
+    cidr_blocks = ["0.0.0.0/0"]  # Allow traffic to anywhere
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # Allow HTTP traffic from anywhere
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # Allow HTTPS traffic from anywhere
+  }
+  
+  ingress {
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # Allow HTTPS traffic from anywhere
+  }
+
+  ingress {
+    from_port   = 3001
+    to_port     = 3001
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # Allow HTTPS traffic from anywhere
+  }
+
+  tags = {
+    Name = "eks-cluster-sg"
+  }
+}
+
+
+
+
 # Fargate Profile for EKS
 /*resource "aws_eks_fargate_profile" "main" {
   cluster_name = aws_eks_cluster.main.name
