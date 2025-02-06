@@ -13,7 +13,7 @@ variable "private_subnet_ids" {
   description = "A list of subnet IDs for the EKS cluster."
 }
 
-variable "fargate_profile_name" {
+/*variable "fargate_profile_name" {
   type        = string
   description = "The name of the Fargate profile."
 }
@@ -26,4 +26,4 @@ variable "fargate_role_arn" {
 variable "fargate_namespace" {
   type        = string
   description = "The Kubernetes namespace for Fargate."
-}
+}*/
