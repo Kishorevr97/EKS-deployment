@@ -1,9 +1,11 @@
 variable "cluster_role_name" {
+  description = "Name of the IAM role for the EKS cluster"
   type        = string
-  description = "The name of the IAM role for the EKS cluster."
+  default     = "eks-cluster-role"
 }
 
-variable "fargate_role_name" {
+variable "node_role_name" {
+  description = "Name of the IAM role for the worker nodes"
   type        = string
-  description = "The name of the IAM role for Fargate pod execution."
+  default     = "eks-node-group-role"
 }
