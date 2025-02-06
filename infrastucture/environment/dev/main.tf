@@ -18,7 +18,7 @@ module "eks" {
 module "iam" {
   source                = "../../modules/iam"
   cluster_role_name     = "eks-cluster-role"
-  fargate_role_name     = "eks-fargate-execution-role"
+  node_role_name    = "eks-node-group-role"
 }
 
 module "ecr" {
