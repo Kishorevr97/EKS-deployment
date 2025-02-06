@@ -14,7 +14,7 @@ resource "aws_eks_cluster" "main" {
 }
 
 # Fargate Profile for EKS
-resource "aws_eks_fargate_profile" "main" {
+/*resource "aws_eks_fargate_profile" "main" {
   cluster_name = aws_eks_cluster.main.name
   fargate_profile_name = var.fargate_profile_name
   pod_execution_role_arn = var.fargate_role_arn
@@ -25,4 +25,4 @@ resource "aws_eks_fargate_profile" "main" {
 
   # Optionally, you can associate specific subnets to the Fargate profile
   subnet_ids = var.private_subnet_ids
-}
+}*/
