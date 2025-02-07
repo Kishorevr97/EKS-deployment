@@ -32,7 +32,7 @@ resource "helm_release" "prometheus" {
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "prometheus"
   namespace  = "monitoring"
-  timeout = 400
+  timeout = 1200
   
   set {
     name  = "podSecurityPolicy.enabled"
