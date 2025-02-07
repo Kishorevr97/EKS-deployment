@@ -29,7 +29,7 @@ jobs:
 
       - name: Build Docker image appointment-service
         run: |
-          docker build -t appointment-service-repo ./app/patient-service
+          docker build -t appointment-service-repo ./app/appointment-service
           docker tag appointment-service-repo:latest 084828605119.dkr.ecr.eu-north-1.amazonaws.com/appointment-service-repo:latest
           
       - name: Build Docker image patient-service
