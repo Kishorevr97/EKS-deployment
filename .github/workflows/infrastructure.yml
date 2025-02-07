@@ -72,7 +72,7 @@ jobs:
     - name: Generate Terraform Plan
       run: |
         cd infrastucture/environment/${{ github.event.inputs.environment }}
-        terraform plan '-var-file=${{ github.event.inputs.environment }}.tfvars' -out=tfplan
+        terraform plan 
 
     # - name: install lfs
     #   run: |
@@ -95,4 +95,4 @@ jobs:
       if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
       run: |
         cd infrastucture/environment/${{ github.event.inputs.environment }}
-        terraform apply '-var-file=${{ github.event.inputs.environment }}.tfvars' -auto-approve
+        terraform apply -auto-approve
