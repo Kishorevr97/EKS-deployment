@@ -16,4 +16,4 @@ spec:
       - name: appointment-service
         image: 084828605119.dkr.ecr.eu-north-1.amazonaws.com/appointment-service-repo:latest
         ports:
-        - containerPort: 80
+        - containerPort: 3001
