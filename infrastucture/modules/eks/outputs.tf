@@ -7,6 +7,8 @@ output "eks_cluster_endpoint" {
   value = aws_eks_cluster.main.endpoint
 }
 
+
+##newly added##
 output "eks_cluster_id" {
   value = aws_eks_cluster.main.id
 }
