@@ -20,6 +20,14 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
 }
 
+#newly added
+
+resource "aws_iam_role_policy_attachment" "EBSCSIDriverPolic" {
+  role       = aws_iam_role.eks_cluster_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+}
+
+
 # IAM Role for Worker Nodes
 resource "aws_iam_role" "eks_node_role" {
   name = "eks-node-group-role"
@@ -50,4 +58,11 @@ resource "aws_iam_role_policy_attachment" "eks_cni_policy" {
 resource "aws_iam_role_policy_attachment" "ec2_container_registry" {
   role       = aws_iam_role.eks_node_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+
+#newly added
+
+resource "aws_iam_role_policy_attachment" "EBSCSIDriver" {
+  role       = aws_iam_role.eks_node_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
 }
