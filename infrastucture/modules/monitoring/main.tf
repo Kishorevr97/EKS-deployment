@@ -27,27 +27,72 @@ resource "kubernetes_namespace" "monitoring" {
   }
 }
 
+
+##newly added
 resource "helm_release" "prometheus" {
+ 
   name       = "prometheus"
+ 
   repository = "https://prometheus-community.github.io/helm-charts"
-  chart      = "prometheus"
+ 
+  chart      = "kube-prometheus-stack"
+ 
   namespace  = "monitoring"
-  timeout = 1200
-  
+ 
+  create_namespace = true
+ 
   set {
-    name  = "podSecurityPolicy.enabled"
-    value = true
+ 
+    name  = "server.global.scrape_interval"
+ 
+    value = "15s"
+ 
   }
-
+ 
   set {
-    name  = "server.persistentVolume.enabled"
-    value = false
-  }
-
-  set {
-    name  = "server.service.type"
+ 
+    name  = "prometheus.service.type"
+ 
     value = "LoadBalancer"
+ 
   }
+ 
+  timeout = 1200  # Increase timeout to 20 minutes
+ 
+ 
+  set {
+ 
+    name  = "prometheus.prometheusSpec.logLevel"
+ 
+    value = "info"
+ 
+  }
+ 
+  set {
+ 
+    name  = "prometheus.prometheusSpec.logFormat"
+ 
+    value = "json"
+ 
+  }
+ 
+ 
+  set {
+ 
+    name  = "prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues"
+ 
+    value = "false"
+ 
+  }
+ 
+  set {
+ 
+    name  = "prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues"
+ 
+    value = "false"
+ 
+  }
+ 
 }
 
 resource "helm_release" "grafana" {
