@@ -99,7 +99,7 @@ resource "aws_eks_node_group" "eks_node_group" {
 }
 
 
-resource "helm_release" "prometheus" {
+/*resource "helm_release" "prometheus" {
   name       = "prometheus"
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "prometheus"
@@ -171,7 +171,7 @@ resource "aws_iam_policy" "amp_policy" {
 resource "aws_iam_role_policy_attachment" "attach_amp" {
   policy_arn = aws_iam_policy.amp_policy.arn
   role       = aws_iam_role.amp_irsa.name
-}
+}*/
 
 
 
