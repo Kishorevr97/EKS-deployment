@@ -97,3 +97,81 @@ resource "aws_eks_node_group" "eks_node_group" {
     ec2_ssh_key = var.ssh_key_name  # Add your SSH key for access
   }
 }
+
+
+resource "helm_release" "prometheus" {
+  name       = "prometheus"
+  repository = "https://prometheus-community.github.io/helm-charts"
+  chart      = "prometheus"
+  namespace  = "monitoring"
+
+  create_namespace = true
+
+  values = [
+    <<EOF
+server:
+  persistentVolume:
+    enabled: true
+EOF
+  ]
+}
+
+
+resource "helm_release" "grafana" {
+  name       = "grafana"
+  repository = "https://grafana.github.io/helm-charts"
+  chart      = "grafana"
+  namespace  = "monitoring"
+
+  create_namespace = true
+
+  values = [
+    <<EOF
+persistence:
+  enabled: true
+  size: 10Gi
+adminUser: "admin"
+adminPassword: "admin123"
+service:
+  type: LoadBalancer
+EOF
+  ]
+}
+
+
+##iarole##
+
+resource "aws_iam_role" "amp_irsa" {
+  name = "amp-irsa-role"
+
+  assume_role_policy = jsonencode({
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        Federated = aws_iam_openid_connect_provider.eks.arn
+      }
+      Action = "sts:AssumeRoleWithWebIdentity"
+    
+    }]
+  })
+}
+
+resource "aws_iam_policy" "amp_policy" {
+  name        = "amp-policy"
+  description = "Policy for Prometheus to push metrics"
+  policy      = jsonencode({
+    Statement = [{
+      Effect   = "Allow"
+      Action   = ["aps:RemoteWrite", "aps:GetSeries", "aps:GetLabels", "aps:GetMetricMetadata"]
+      Resource = "*"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "attach_amp" {
+  policy_arn = aws_iam_policy.amp_policy.arn
+  role       = aws_iam_role.amp_irsa.name
+}
+
+
+
